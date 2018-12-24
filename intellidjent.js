@@ -2,24 +2,33 @@ console.log("linked")
 
 
 let app = new Vue({
-		el: '#app',
-		data: {
-				dummy: "asdf"
-		}
+	el: '#app',
+	data: {
+		dummy: "asdf"
+	}
 })                      
 
 
 
 let x = new Howl({
-		    src: ['sounds/acoustic-snare.mp3'],
-			html5: true
-})
-console.log("asdf")
-console.log(document.getElementById("test"))
-document.addEventListener("click", function(){
-		x.play()
+	src: ['sounds/e.mp3'],
+	html5: true
 })
 
+let pushed = {}
+let currentlyPlaying = -1
+
+document.addEventListener("keydown", event => {
+    if(pushed[event.key] != true){
+        pushed[event.key] = true
+        currentlyPlaying = x.play()
+    }
+})
+
+document.addEventListener("keyup", event => {
+    pushed[event.key] = false
+    x.stop(currentlyPlaying)
+})
 
 
 
