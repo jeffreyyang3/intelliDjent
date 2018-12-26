@@ -1,12 +1,15 @@
 console.log("linked")
 
+const socket = io()
 
 let app = new Vue({
 	el: '#app',
 	data: {
 		dummy: "asdf"
 	}
-})                      
+})
+
+
 
 
 
