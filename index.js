@@ -3,6 +3,10 @@ const app = express()
 const http = require('http').Server(app)
 const webSocket = require('ws')
 const webSocketServer = new webSocket.Server({server: app.listen(8081)})
+const path = require('path')
+const favicon = require('serve-favicon')
+
+app.use(favicon(path.join(__dirname, 'images', 'favicon.ico')))
 
 app.get('/', (request, response) => {
     response.sendFile(__dirname + '/index.html');

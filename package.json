@@ -18,6 +18,7 @@
   "homepage": "https://github.com/jeffreyyang3/intelliDjent#readme",
   "dependencies": {
     "express": "^4.16.4",
+    "serve-favicon": "^2.5.0",
     "ws": "^6.1.2"
   }
 }
