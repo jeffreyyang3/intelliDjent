@@ -37,7 +37,9 @@ var app = new Vue({
         },
 
         receiveSound: function(data){
-            if(data['username'] == self.userName){
+            console.log("data username " + data['userName'])
+            console.log("vm username " + this.userName)
+            if(data['userName'] == this.userName){
                 return
             }
             console.log(this.howlIDs)
@@ -73,19 +75,19 @@ const howls = app.howls
 const howlIDs = app.howlIDs
 const pushed = app.pushed
 const keybindings = app.keybindings
-
+const userName = app.userName
 document.addEventListener("keydown", event => {
     if(event.key in keybindings && !pushed[event.key]){
       /*  currentHowl = howls[event.key]
         currentlyPlayingID = currentHowl.play() */
-        howlIDs[app.userName][keybindings[event.key]] = 
+        howlIDs[userName][keybindings[event.key]] = 
 		howls[keybindings[event.key]].play()
         pushed[event.key] = true
         if(app.webSocketOpen){
             webSocket.send(JSON.stringify({
                 type: 'sound',
                 play: true,
-                userName: app.userName,
+                userName: userName,
                 sound: keybindings[event.key],
             }))
         }
@@ -96,12 +98,12 @@ document.addEventListener("keyup", event => {
     if(event.key in keybindings){
         pushed[event.key] = false
         howls[keybindings[event.key]].stop(howlIDs
-			[app.userName][keybindings[event.key]])
+			[userName][keybindings[event.key]])
         if(app.webSocketOpen){
             webSocket.send(JSON.stringify({
                 type: 'sound',
                 play: false,
-                userName: app.userName,
+                userName: userName,
                 sound: keybindings[event.key]
 
             }))
@@ -120,11 +122,8 @@ webSocket.onopen = ()=> {
     app.webSocketOpen = true
     webSocket.onmessage = event =>{
         data = JSON.parse(event.data)
-        if(data['play']){
+        if(data['type'] == "sound"){
             app.proxyReceiveSound(data)
-        }
-        else{
-            console.log("placeholder")
         }
     }
 		
