@@ -1,0 +1,23 @@
+{
+  "name": "intellidjent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffreyyang3/intelliDjent.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeffreyyang3/intelliDjent/issues"
+  },
+  "homepage": "https://github.com/jeffreyyang3/intelliDjent#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "ws": "^6.1.2"
+  }
+}
