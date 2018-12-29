@@ -10,10 +10,13 @@
 <body>
 
 		<div id="app">
+            <h1>intelliDjent</h1>
+            <div class="keybindings" v-for="(note, binding) in displayBindings">
+                {{ binding  }}: {{ note }}
+            </div>
 
-		    <h1>the future of gaming</h1>
-            <button id="test"> dankman </button>
-            <input type="text" value = "placeholder" id="userName">
+
+
 		</div>
 
 

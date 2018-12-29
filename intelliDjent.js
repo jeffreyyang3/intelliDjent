@@ -18,11 +18,13 @@ var app = new Vue({
 	el: '#app',
 	data: {
         userName: Math.floor(Math.random() * 9999999).toString(),
+        fadeTime: 150,
         keybindings: JSON.parse(defaultKeybindings),
         webSocketOpen: false,
         howls: {},
         howlIDs: {},
         pushed: {},
+        displayBindings: {},
 
     },
     methods: {
@@ -30,15 +32,13 @@ var app = new Vue({
             for(let bind in bindings){
                 howlDict[bindings[bind]] = new Howl({
                     src:['sounds/' + bindings[bind] + '.mp3'],
-                    html5: true
+                    html5: true,
                 })
                 IDs[this.userName] = {}
             }
         },
 
         receiveSound: function(data){
-            console.log("data username " + data['userName'])
-            console.log("vm username " + this.userName)
             if(data['userName'] == this.userName){
                 return
             }
@@ -48,16 +48,23 @@ var app = new Vue({
 
             }
             if(data['play']){
-                console.log
+                console.log("play")
                 this.howlIDs[data['userName']][data['sound']] =
 		        this.howls[data['sound']].play()
             }
             else{
                 console.log("stop")
-                this.howls[data['sound']].stop(
+                this.howls[data['sound']].fade(1,0,data['fadeTime'],
                 this.howlIDs[data['userName']][data['sound']]
                 )
 
+            }
+        },
+        updateKeyBindings: function(bindings){
+            this.displayBindings = {}
+            for(let bind in bindings){
+                this.displayBindings[bind] = bindings[bind]
+                .replace('sharp', '#').toUpperCase() + " POWER CHORD"
             }
         },
         proxyReceiveSound: function(data){
@@ -68,6 +75,7 @@ var app = new Vue({
     },
     mounted: function(){
         this.setHowls(this.keybindings, this.howls, this.howlIDs)
+        this.updateKeyBindings(this.keybindings)
     }
 })
 
@@ -83,6 +91,7 @@ document.addEventListener("keydown", event => {
         howlIDs[userName][keybindings[event.key]] = 
 		howls[keybindings[event.key]].play()
         pushed[event.key] = true
+
         if(app.webSocketOpen){
             webSocket.send(JSON.stringify({
                 type: 'sound',
@@ -97,14 +106,15 @@ document.addEventListener("keydown", event => {
 document.addEventListener("keyup", event => {
     if(event.key in keybindings){
         pushed[event.key] = false
-        howls[keybindings[event.key]].stop(howlIDs
+        howls[keybindings[event.key]].fade(1,0,app.fadeTime,howlIDs
 			[userName][keybindings[event.key]])
         if(app.webSocketOpen){
             webSocket.send(JSON.stringify({
                 type: 'sound',
                 play: false,
                 userName: userName,
-                sound: keybindings[event.key]
+                sound: keybindings[event.key],
+                fadeTime: app.fadeTime
 
             }))
         }
@@ -123,7 +133,7 @@ webSocket.onopen = ()=> {
     webSocket.onmessage = event =>{
         data = JSON.parse(event.data)
         if(data['type'] == "sound"){
-            app.proxyReceiveSound(data)
+            app.receiveSound(data)
         }
     }
 		
