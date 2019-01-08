@@ -11,10 +11,14 @@
 
 		<div id="app">
             <h1>intelliDjent</h1>
-            <div class="keybindings" v-for="(note, binding) in displayBindings">
-                {{ binding  }}: {{ note }}
-            </div>
+                <div class="keybindings" v-for="(note, binding) in displayBindings">
+                    {{ binding  }}: {{ note }}
+                </div>
+            <br>
 
+            <div class="currentPressed" v-for="(note, isPushed) in pushed">
+                    {{ note }} | {{ isPushed }}
+                </div>
 
 
 		</div>
