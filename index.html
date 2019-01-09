@@ -16,9 +16,12 @@
                 </div>
             <br>
 
-            <div class="currentPressed" v-for="(note, isPushed) in pushed">
-                    {{ note }} | {{ isPushed }}
-                </div>
+            <div class="currentPressed" v-for="(isPushed, note) in pushed"
+            v-if="isPushed">
+                <transition name="fade">
+                    playing {{ note }}
+                </transition>
+            </div>
 
 
 		</div>

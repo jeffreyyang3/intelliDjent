@@ -93,7 +93,6 @@ document.addEventListener("keydown", event => {
 		howls[keybindings[event.key]].play()
         app.$set(pushed, event.key, true)
         pushed[event.key] = true
-        console.log(pushed)
 
 
         if(app.webSocketOpen){
@@ -110,9 +109,11 @@ document.addEventListener("keydown", event => {
 document.addEventListener("keyup", event => {
     if(event.key in keybindings){
         app.$set(pushed, event.key, false)
+        //delete pushed[event.key]
         pushed[event.key] = false
         howls[keybindings[event.key]].fade(1,0,app.fadeTime,howlIDs
 			[userName][keybindings[event.key]])
+        
         if(app.webSocketOpen){
             webSocket.send(JSON.stringify({
                 type: 'sound',
